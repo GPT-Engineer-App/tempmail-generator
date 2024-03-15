@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Button, Container, Flex, Heading, IconButton, Image, Input, Link, Stack, Text, VStack } from "@chakra-ui/react";
 import { FaCopy } from "react-icons/fa";
 
@@ -15,8 +15,28 @@ const Index = () => {
     navigator.clipboard.writeText(email);
   };
 
+  useEffect(() => {
+    const fetchEmails = async () => {
+      try {
+        const response = await fetch("/api/emails");
+        const data = await response.json();
+        setInbox(data);
+      } catch (error) {
+        console.error("Error fetching emails:", error);
+      }
+    };
+
+    fetchEmails();
+    const interval = setInterval(fetchEmails, 5000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, []);
+
   return (
     <Box>
+      {}
       {/* Header */}
       <Box bg="gray.100" py={4}>
         <Container maxW="container.lg">
