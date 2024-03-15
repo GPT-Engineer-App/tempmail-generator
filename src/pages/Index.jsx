@@ -18,7 +18,7 @@ const Index = () => {
   useEffect(() => {
     const fetchEmails = async () => {
       try {
-        const response = await fetch("/api/emails");
+        const response = await fetch(`/api/emails?address=${encodeURIComponent(email)}`);
         const data = await response.json();
         setInbox(data);
       } catch (error) {
@@ -26,13 +26,15 @@ const Index = () => {
       }
     };
 
-    fetchEmails();
-    const interval = setInterval(fetchEmails, 5000);
+    if (email) {
+      fetchEmails();
+      const interval = setInterval(fetchEmails, 5000);
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
+      return () => {
+        clearInterval(interval);
+      };
+    }
+  }, [email]);
 
   return (
     <Box>
